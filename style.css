@@ -1,0 +1,27 @@
+html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:transparent}
+      .card{background:#fff;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.15);padding:clamp(18px,4vw,30px);max-width:480px;margin:40px auto;box-sizing:border-box}
+      h2{margin:0 0 20px;color:#004c97;text-align:center;font-size:clamp(1.2rem,4vw,1.5rem)}
+      label{font-weight:600;color:#004c97;display:block;text-align:center;margin-bottom:6px}
+      .search-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:20px}
+      input[type=number]{flex:1 1 160px;padding:12px 14px;font-size:16px;border:1px solid #ccc;border-radius:4px;background:#fff;box-sizing:border-box}
+      button{flex:0 1 120px;padding:12px 18px;font-size:16px;border:none;border-radius:4px;background:#004c97;color:#fff;cursor:pointer}
+      button:hover{background:#003875}
+      table{width:100%;border-collapse:separate;border-spacing:0 8px}
+      th {
+  white-space: nowrap;   /* keep full word on one line */
+  background: #004c97;
+  color: #fff;
+  text-align: left;
+  padding: 10px 8px;
+  font-weight: 600;
+  font-size: clamp(.75rem, 2.5vw, .9rem);
+  word-break: normal;    /* optional safety */
+}
+      th{background:#004c97;color:#fff;text-align:left;padding:10px 8px;font-weight:600;font-size:clamp(.75rem,2.5vw,.9rem);word-break:break-word}
+      td{padding:10px 8px;border-bottom:1px solid #eee;word-break:break-word;font-size:clamp(.75rem,2.5vw,.9rem)}
+      tr:last-child td{border-bottom:none}
+      tr:nth-child(even) td{background:#f7f7f7}
+      tr:nth-child(odd)  td{background:#ffffff}
+      .pin svg{width:16px;height:16px;fill:#fff;vertical-align:middle;margin-left:4px}
+      .error{color:#b00;padding:12px;text-align:center}
+      .mapLink{color:#004c97;text-decoration:underline;font-weight:600}

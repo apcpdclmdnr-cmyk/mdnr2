@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Madanur Consumer Information</title>
+    <style>
+      html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:transparent}
+      .card{background:#fff;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.15);padding:clamp(18px,4vw,30px);max-width:480px;margin:40px auto;box-sizing:border-box}
+      h2{margin:0 0 20px;color:#004c97;text-align:center;font-size:clamp(1.2rem,4vw,1.5rem)}
+      label{font-weight:600;color:#004c97;display:block;text-align:center;margin-bottom:6px}
+      .search-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:20px}
+      input[type=number]{flex:1 1 160px;padding:12px 14px;font-size:16px;border:1px solid #ccc;border-radius:4px;background:#fff;box-sizing:border-box}
+      button{flex:0 1 120px;padding:12px 18px;font-size:16px;border:none;border-radius:4px;background:#004c97;color:#fff;cursor:pointer}
+      button:hover{background:#003875}
+      table{width:100%;border-collapse:separate;border-spacing:0 8px}
+      th {
+  white-space: nowrap;   /* keep full word on one line */
+  background: #004c97;
+  color: #fff;
+  text-align: left;
+  padding: 10px 8px;
+  font-weight: 600;
+  font-size: clamp(.75rem, 2.5vw, .9rem);
+  word-break: normal;    /* optional safety */
+}
+      th{background:#004c97;color:#fff;text-align:left;padding:10px 8px;font-weight:600;font-size:clamp(.75rem,2.5vw,.9rem);word-break:break-word}
+      td{padding:10px 8px;border-bottom:1px solid #eee;word-break:break-word;font-size:clamp(.75rem,2.5vw,.9rem)}
+      tr:last-child td{border-bottom:none}
+      tr:nth-child(even) td{background:#f7f7f7}
+      tr:nth-child(odd)  td{background:#ffffff}
+      .pin svg{width:16px;height:16px;fill:#fff;vertical-align:middle;margin-left:4px}
+      .error{color:#b00;padding:12px;text-align:center}
+      .mapLink{color:#004c97;text-decoration:underline;font-weight:600}
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h2>Consumer Search</h2>
+      <label>Please enter Service No</label>
+      <div class="search-row">
+        <input type="number" id="ssNo" placeholder="Short Service No" min="0" inputmode="numeric" />
+        <button onclick="search()">Search</button>
+      </div>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      function search() {
+        const ssNo = document.getElementById('ssNo').value.trim();
+        if (!ssNo) { alert('Enter a Short Service No'); return; }
+        google.script.run
+          .withSuccessHandler(showStackedTable)
+          .withFailureHandler(showError)
+          .lookup(ssNo);
+      }
+
+      function showStackedTable(obj) {
+        const div = document.getElementById('result');
+        if (!obj) {
+          div.innerHTML = '<div class="error">No record found for this Short Service No.</div>';
+          return;
+        }
+        let imgUrl = '';
+        const urlIdx = obj.headers.indexOf('Copiable URL');
+        if (urlIdx > -1) imgUrl = (obj.row[urlIdx] || '').trim();
+
+        let html = '<table>';
+        obj.headers.forEach((hdr, idx) => {
+          if (hdr.trim().toLowerCase() === 'short service no') return;
+          let cell = obj.row[idx] || '';
+          if (hdr === 'Copiable URL') {
+            html += `<tr><th>Link<span class="pin">${pinSvg()}</span></th><td>${cell}</td></tr>`;
+          } else if (hdr === 'Map Link') {
+            const link = imgUrl
+              ? `<a class="mapLink" href="${imgUrl}" target="_blank" rel="noopener">View Location</a>`
+              : '';
+            html += `<tr><th>Navigation</th><td>${link}</td></tr>`;
+          } else {
+            html += `<tr><th>${hdr}</th><td>${cell}</td></tr>`;
+          }
+        });
+        html += '</table>';
+        div.innerHTML = html;
+      }
+
+      function showError(err) {
+        document.getElementById('result').innerHTML = '<div class="error">Server error: ' + err.message + '</div>';
+      }
+
+      function pinSvg() {
+        return `<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+      }
+    </script>
+  </body>
+</html>
